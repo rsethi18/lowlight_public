@@ -8,9 +8,18 @@ import io
 # Load the model
 @st.cache_resource
 def load_model():
-    return torch.load('best-medium.pt', map_location=torch.device('cpu'))
+    try:
+        model = torch.load('best-medium.pt', map_location=torch.device('cpu'))
+        model.eval()
+        return model
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+        return None
 
 model = load_model()
+
+if model is None:
+    st.stop()
 
 def process_image(image, confidence_threshold):
     results = model(image)
