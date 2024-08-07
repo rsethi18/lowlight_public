@@ -4,12 +4,27 @@ import cv2
 import numpy as np
 from PIL import Image
 import io
+import os
+import requests
 
-# Load the model
+def download_model(url, destination):
+    if not os.path.exists(destination):
+        st.info(f"Downloading model file from {url}")
+        response = requests.get(url, stream=True)
+        with open(destination, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk)
+
+model_url = 'https://drive.google.com/uc?export=download&id=16yGC7FY2UEHIHmOwbvqUR1VC1RHj1DKF'
+model_path = 'best-medium.pt'
+
+download_model(model_url, model_path)
+
 @st.cache_resource
 def load_model():
     try:
-        model = torch.load('best-medium.pt', map_location=torch.device('cpu'))
+        model = torch.load(model_path, map_location=torch.device('cpu'))
         model.eval()
         return model
     except Exception as e:
