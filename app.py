@@ -5,17 +5,20 @@ import numpy as np
 from PIL import Image
 import io
 import os
-import requests
+import gdown
 
-# Function to download the model file from Google Drive
+# Function to download the model file from Google Drive using gdown
 def download_model(url, destination):
     if not os.path.exists(destination):
         st.info(f"Downloading model file from {url}")
-        response = requests.get(url, stream=True)
-        with open(destination, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                if chunk:
-                    f.write(chunk)
+        gdown.download(url, destination, quiet=False)
+
+# URL of the model file on Google Drive
+model_url = 'https://drive.google.com/uc?export=download&id=16yGC7FY2UEHIHmOwbvqUR1VC1RHj1DKF'
+model_path = 'best-medium.pt'
+
+# Download the model file if it doesn't exist
+download_model(model_url, model_path)
 
 # Function to verify the downloaded model file
 def verify_model_file(file_path):
@@ -30,13 +33,6 @@ def verify_model_file(file_path):
     except Exception as e:
         st.error(f"Error verifying model file: {e}")
         return False
-
-# URL of the model file on Google Drive
-model_url = 'https://drive.google.com/uc?export=download&id=16yGC7FY2UEHIHmOwbvqUR1VC1RHj1DKF'
-model_path = 'best-medium.pt'
-
-# Download the model file if it doesn't exist
-download_model(model_url, model_path)
 
 # Verify the model file
 if not verify_model_file(model_path):
