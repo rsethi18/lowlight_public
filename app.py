@@ -7,6 +7,7 @@ import io
 import os
 import requests
 
+# Function to download the model file from Google Drive
 def download_model(url, destination):
     if not os.path.exists(destination):
         st.info(f"Downloading model file from {url}")
@@ -16,11 +17,31 @@ def download_model(url, destination):
                 if chunk:
                     f.write(chunk)
 
+# Function to verify the downloaded model file
+def verify_model_file(file_path):
+    try:
+        with open(file_path, 'rb') as f:
+            first_bytes = f.read(2)
+        if first_bytes == b'\x80\x02':
+            return True
+        else:
+            return False
+    except Exception as e:
+        return False
+
+# URL of the model file on Google Drive
 model_url = 'https://drive.google.com/uc?export=download&id=16yGC7FY2UEHIHmOwbvqUR1VC1RHj1DKF'
 model_path = 'best-medium.pt'
 
+# Download the model file if it doesn't exist
 download_model(model_url, model_path)
 
+# Verify the model file
+if not verify_model_file(model_path):
+    st.error("Downloaded model file is invalid. Please check the download link and try again.")
+    st.stop()
+
+# Load the model
 @st.cache_resource
 def load_model():
     try:
