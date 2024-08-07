@@ -4,26 +4,13 @@ import cv2
 import numpy as np
 from PIL import Image
 import io
-import os
-
-# Path to the model file in the repository
-model_path = 'best-medium.pt'
 
 # Load the model
 @st.cache_resource
 def load_model():
-    try:
-        model = torch.load(model_path, map_location=torch.device('cpu'))
-        model.eval()
-        return model
-    except Exception as e:
-        st.error(f"Error loading model: {e}")
-        return None
+    return torch.hub.load('ultralytics/yolov5', 'custom', path='best-medium.pt')
 
 model = load_model()
-
-if model is None:
-    st.stop()
 
 def process_image(image, confidence_threshold):
     results = model(image)
