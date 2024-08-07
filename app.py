@@ -25,8 +25,10 @@ def verify_model_file(file_path):
         if first_bytes == b'\x80\x02':
             return True
         else:
+            st.error(f"File at {file_path} is not a valid PyTorch model. First bytes: {first_bytes}")
             return False
     except Exception as e:
+        st.error(f"Error verifying model file: {e}")
         return False
 
 # URL of the model file on Google Drive
