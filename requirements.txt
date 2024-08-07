@@ -2,6 +2,4 @@ streamlit
 torch
 Pillow
 opencv-python
-urllib3==2.2.2
-watchdog==4.0.1
-gdown
+ultralytics
