@@ -8,7 +8,7 @@ import io
 # Load the model
 @st.cache_resource
 def load_model():
-    return torch.hub.load('ultralytics/yolov5', 'custom', path='best-medium.pt')
+    return torch.hub.load('ultralytics/yolov5', 'custom', path='best-medium (1).pt')
 
 model = load_model()
 
